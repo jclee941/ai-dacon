@@ -1,0 +1,22 @@
+{
+  "competition_id": "236722",
+  "team": "qws941",
+  "submission_file": "qwen3vl_8b_hires.csv",
+  "model": "Qwen/Qwen3-VL-8B-Instruct",
+  "backend": "transformers",
+  "load_in_4bit": true,
+  "max_pixels": 786432,
+  "max_new_tokens": 64,
+  "prompt_template": "bias_guarded",
+  "rows": 8500,
+  "label_distribution": {"0": 3147, "1": 2543, "2": 2810},
+  "parse_ok": 8500,
+  "raw_output_all_single_digit": true,
+  "submission_vs_raw_mismatch": 0,
+  "full_run_seconds": 3052.44,
+  "sec_per_sample": 0.3591,
+  "dacon_api_result": {"isSubmitted": false, "detail": "Over max submission count of Daily"},
+  "submission_status": "PENDING - daily submit limit reached; resubmit next day",
+  "differs_from_200704_variant_labels": 240,
+  "notes": "Higher-resolution Qwen3-VL variant. OOM-free via expandable_segments; worst-32 largest images safe up to 1003520. Awaiting daily-limit reset to submit."
+}
