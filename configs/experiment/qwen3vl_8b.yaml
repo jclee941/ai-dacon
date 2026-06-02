@@ -1,0 +1,13 @@
+defaults: configs/default.yaml
+
+experiment_name: qwen3vl_8b
+model:
+  name: qwen3_vl
+  model_id: Qwen/Qwen3-VL-8B-Instruct
+  backend: transformers
+  dtype: bfloat16
+  load_in_4bit: true
+  max_new_tokens: 64
+  max_pixels: 200704       # message-level cap; safe on 16GB shared with TTS (~7GB free)
+prompt:
+  template: bias_guarded
