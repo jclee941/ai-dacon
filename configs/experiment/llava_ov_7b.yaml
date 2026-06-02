@@ -1,0 +1,9 @@
+defaults: configs/default.yaml
+
+experiment_name: llava_ov_7b
+model:
+  name: llava_ov
+  model_id: llava-hf/llava-onevision-qwen2-7b-si-hf
+  backend: vllm
+prompt:
+  template: evidence_then_answer

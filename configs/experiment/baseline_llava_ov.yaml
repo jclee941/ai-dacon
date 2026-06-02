@@ -1,0 +1,9 @@
+defaults: configs/default.yaml
+
+experiment_name: baseline_llava_ov
+model:
+  name: llava_ov
+  model_id: llava-hf/llava-onevision-qwen2-0.5b-si-hf
+  backend: vllm
+prompt:
+  template: bias_guarded

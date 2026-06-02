@@ -1,0 +1,12 @@
+defaults: configs/default.yaml
+
+experiment_name: baseline_llava_ov_transformers
+model:
+  name: llava_ov
+  model_id: llava-hf/llava-onevision-qwen2-0.5b-si-hf
+  backend: transformers
+  dtype: bfloat16
+  load_in_4bit: false   # 0.5B는 bf16로 충분 (GPU 여유 7GB+), bitsandbytes 불필요
+  max_new_tokens: 64
+prompt:
+  template: bias_guarded

@@ -1,0 +1,39 @@
+seed: 42
+
+paths:
+  raw_dir: data/raw
+  image_dir: data/raw/test/images
+  test_csv: data/raw/test/test.csv
+  sample_submission: data/raw/sample_submission.csv
+  output_dir: outputs
+  artifact_dir: artifacts
+
+model:
+  name: llava_ov
+  model_id: llava-hf/llava-onevision-qwen2-0.5b-si-hf
+  backend: vllm            # vllm | transformers
+  dtype: bfloat16
+  device_map: auto
+  max_new_tokens: 64
+  load_in_4bit: false
+
+prompt:
+  template: bias_guarded
+  include_cot: false
+  output_format: number_only
+
+inference:
+  batch_size: 1
+  temperature: 0.0
+  top_p: 1.0
+  num_prompt_variants: 1   # 추론 0.5s/sample 제약: 변형 수 최소화
+  cache_predictions: true
+
+ambiguity:
+  # 규칙 #5: 최종 답은 LLM이 생성. 룰 override 없음.
+  prompt_strategy: bias_guarded
+  diagnose_unknown: true
+
+submission:
+  id_column: sample_id
+  answer_column: label
