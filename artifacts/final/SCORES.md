@@ -53,3 +53,8 @@ Replaced weakest qwen25vl_7b (0.90658) with qwen3vl_8b_bgv2 (bias_guarded_v2 pro
 4. qwen3vl_8b_lowres.csv (pending)
 5. qwen3vl_8b_bgv2.csv (NEW prompt, 279 diff; cached-model reuse, no download)
 Auto-submit script (scripts/auto_submit_next_window.sh) updated to this set.
+
+## Finding (loop 16): InternVL3 is prompt-insensitive; pool unchanged
+- InternVL3-8B + bias_guarded_v2 vs InternVL3-8B + bias_guarded: only 2/128 labels differ (near-identical). The SAME prompt swap on Qwen3-VL gave 279/8500 diff.
+- Conclusion: bias_guarded_v2 meaningfully changes Qwen3-VL but is a near no-op on InternVL3. The internvl3_8b_bgv2 candidate was rejected as a non-distinct duplicate and NOT added to the pool.
+- Canonical next-window top-5 unchanged: qwen3vl_8b, internvl3_8b, qwen3vl_8b_hires, qwen3vl_8b_lowres, qwen3vl_8b_bgv2.
