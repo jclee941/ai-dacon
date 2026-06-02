@@ -1,0 +1,42 @@
+{
+  "seed": 42,
+  "experiment_name": "qwen3vl_8b_lowres",
+  "paths": {
+    "raw_dir": "data/raw",
+    "image_dir": "data/raw/test/images",
+    "test_csv": "data/raw/test/test.csv",
+    "sample_submission": "data/raw/sample_submission.csv",
+    "output_dir": "outputs",
+    "artifact_dir": "artifacts"
+  },
+  "model": {
+    "name": "qwen3_vl",
+    "model_id": "Qwen/Qwen3-VL-8B-Instruct",
+    "backend": "transformers",
+    "dtype": "bfloat16",
+    "device_map": "auto",
+    "max_new_tokens": 64,
+    "load_in_4bit": true,
+    "max_pixels": 100352
+  },
+  "prompt": {
+    "template": "bias_guarded",
+    "include_cot": false,
+    "output_format": "number_only"
+  },
+  "inference": {
+    "batch_size": 1,
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "num_prompt_variants": 1,
+    "cache_predictions": true
+  },
+  "ambiguity": {
+    "prompt_strategy": "bias_guarded",
+    "diagnose_unknown": true
+  },
+  "submission": {
+    "id_column": "sample_id",
+    "answer_column": "label"
+  }
+}

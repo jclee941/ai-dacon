@@ -1,0 +1,13 @@
+defaults: configs/default.yaml
+
+experiment_name: qwen3vl_8b_lowres
+model:
+  name: qwen3_vl
+  model_id: Qwen/Qwen3-VL-8B-Instruct
+  backend: transformers
+  dtype: bfloat16
+  load_in_4bit: true
+  max_new_tokens: 64
+  max_pixels: 100352       # lower res; 200704 beat 786432, so probe even lower with proven bias_guarded
+prompt:
+  template: bias_guarded

@@ -1,0 +1,13 @@
+defaults: configs/default.yaml
+
+experiment_name: qwen3vl_8b_evidence_only
+model:
+  name: qwen3_vl
+  model_id: Qwen/Qwen3-VL-8B-Instruct
+  backend: transformers
+  dtype: bfloat16
+  load_in_4bit: true
+  max_new_tokens: 64
+  max_pixels: 786432
+prompt:
+  template: evidence_only
