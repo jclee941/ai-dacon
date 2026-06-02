@@ -1,0 +1,9 @@
+[Unit]
+Description=Fire DACON auto-submit shortly after the daily cap resets (KST 00:05)
+
+[Timer]
+OnCalendar=*-*-* 00:05:00
+Persistent=true
+
+[Install]
+WantedBy=timers.target

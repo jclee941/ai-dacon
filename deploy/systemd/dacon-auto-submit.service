@@ -1,0 +1,6 @@
+[Unit]
+Description=DACON auto-submit next-window top-5 candidates (team qws941)
+
+[Service]
+Type=oneshot
+ExecStart=/home/jclee/dev/ai-dacon/scripts/auto_submit_next_window.sh qws941
