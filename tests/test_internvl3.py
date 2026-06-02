@@ -38,3 +38,10 @@ def test_loader_routes_internvl3(monkeypatch: pytest.MonkeyPatch) -> None:
 
     assert isinstance(model, FakeInternVL3Model)
     assert captured["model_id"] == "OpenGVLab/InternVL3-8B-hf"
+
+
+def test_internvl3_config_has_no_unused_max_pixels() -> None:
+    # InternVL uses 448x448 tiling (max_patches), not max_pixels; config must not
+    # claim a max_pixels value the wrapper cannot enforce.
+    cfg = load_config(Path("configs/experiment/internvl3_8b.yaml"))
+    assert cfg.model.max_pixels is None

@@ -17,7 +17,7 @@ class InternVL3Model(VLMModel):
         device_map: str = "auto",
         max_new_tokens: int = 64,
         load_in_4bit: bool = True,
-        max_pixels: int | None = None,
+        max_pixels: int | None = None,  # noqa: ARG002  InternVL uses 448x448 tiling, not max_pixels
     ) -> None:
         import torch
         from transformers import (
@@ -27,7 +27,8 @@ class InternVL3Model(VLMModel):
         )
 
         self.max_new_tokens = max_new_tokens
-        self.max_pixels = max_pixels
+        # NOTE: InternVL uses fixed 448x448 tiling (max_patches), so max_pixels is not
+        # applicable and is intentionally ignored here.
         torch_dtype = getattr(torch, dtype)
 
         quant_config = None

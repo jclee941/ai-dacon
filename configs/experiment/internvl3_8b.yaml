@@ -8,6 +8,5 @@ model:
   dtype: bfloat16
   load_in_4bit: true
   max_new_tokens: 64
-  max_pixels: 200704
 prompt:
   template: bias_guarded
