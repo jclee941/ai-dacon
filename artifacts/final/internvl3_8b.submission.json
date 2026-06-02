@@ -1,0 +1,21 @@
+{
+  "competition_id": "236722",
+  "team": "qws941",
+  "submission_file": "internvl3_8b.csv",
+  "model": "OpenGVLab/InternVL3-8B-hf",
+  "backend": "transformers",
+  "load_in_4bit": true,
+  "max_pixels": 200704,
+  "max_new_tokens": 64,
+  "prompt_template": "bias_guarded",
+  "rows": 8500,
+  "label_distribution": {"0": 2802, "1": 3053, "2": 2645},
+  "parse_ok": 8500,
+  "submission_vs_raw_mismatch": 0,
+  "full_run_seconds": 6232.21,
+  "sec_per_sample": 0.7332,
+  "differs_from_qwen3vl_8b_labels": 1031,
+  "dacon_api_result": "not yet submitted (prepared for next window)",
+  "submission_status": "PENDING - prepared candidate; submit next reset window",
+  "note": "Distinct strong model (InternVL3-8B). 168 outputs were 'N. <text>' form but parser took leading digit correctly; 0 invalid labels."
+}

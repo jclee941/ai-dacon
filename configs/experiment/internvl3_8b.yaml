@@ -1,0 +1,13 @@
+defaults: configs/default.yaml
+
+experiment_name: internvl3_8b
+model:
+  name: internvl3
+  model_id: OpenGVLab/InternVL3-8B-hf
+  backend: transformers
+  dtype: bfloat16
+  load_in_4bit: true
+  max_new_tokens: 64
+  max_pixels: 200704
+prompt:
+  template: bias_guarded

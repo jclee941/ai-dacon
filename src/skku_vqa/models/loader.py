@@ -36,6 +36,18 @@ def load_model(cfg: ModelConfig) -> VLMModel:
             )
         raise ValueError(f"unsupported backend for llava: {backend}")
 
+    if name.startswith("internvl"):
+        from .internvl3 import InternVL3Model
+
+        return InternVL3Model(
+            model_id=cfg.model_id,
+            dtype=cfg.dtype,
+            device_map=cfg.device_map,
+            max_new_tokens=cfg.max_new_tokens,
+            load_in_4bit=getattr(cfg, "load_in_4bit", True),
+            max_pixels=cfg.max_pixels,
+        )
+
     if name.startswith("qwen3_vl"):
         from .qwen3_vl import Qwen3VLModel
 
