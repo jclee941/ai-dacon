@@ -1,0 +1,50 @@
+[project]
+name = "skku-vqa"
+version = "0.1.0"
+description = "2026 SKKU Multimodal AI Challenge (DACON #236722) - Multimodal bias-aware VQA"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "torch>=2.2",
+    "transformers>=4.49",
+    "accelerate>=0.34",
+    "pillow>=10.0",
+    "pandas>=2.0",
+    "numpy>=1.26",
+    "pyyaml>=6.0",
+    "pydantic>=2.6",
+    "tqdm>=4.66",
+    "scikit-learn>=1.4",
+]
+
+[project.optional-dependencies]
+vlm = [
+    "qwen-vl-utils>=0.0.8",
+    "peft>=0.11",
+    "bitsandbytes>=0.43",
+]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+    "mypy>=1.10",
+]
+
+[project.scripts]
+skku-vqa = "skku_vqa.cli:main"
+
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

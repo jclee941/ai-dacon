@@ -1,0 +1,59 @@
+# Data (원본/대용량은 커밋하지 않음)
+data/raw/*
+!data/raw/.gitkeep
+data/interim/*
+!data/interim/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+data/external/**/*.jsonl
+data/external/**/*.csv
+data/external/**/images/
+
+# Outputs / artifacts
+outputs/
+artifacts/lora_adapters/*
+!artifacts/lora_adapters/.gitkeep
+*.ckpt
+*.safetensors
+*.bin
+*.pt
+*.pth
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.python-version
+
+# Env / secrets
+.env
+*.key
+
+# Notebooks
+.ipynb_checkpoints/
+
+# Tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Competition raw archive (2.9GB) and extracted data
+open.zip
+data/raw/test/
+data/raw/train/
+data/raw/*.csv
+
+# omo/ralph-loop internal
+.omo/
