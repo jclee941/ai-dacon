@@ -11,7 +11,7 @@ REPO="$(pwd)"
 TEAM="${1:-qws941}"
 LOG=/tmp/dacon_auto_submit.log
 WHL=/tmp/dacon_submit_api-0.1.2-py3-none-any.whl
-VENV=/tmp/dacon_auto_venv
+VENV="$REPO/.dacon_auto_venv"   # repo-local so it survives reboot (not /tmp)
 
 CANDIDATES=(
   "artifacts/final/qwen3vl_8b.csv"
@@ -32,7 +32,7 @@ if [ ! -x "$VENV/bin/python" ]; then
 fi
 
 submit_one() {
-  local csv="$1" name memo
+  local csv="$1" name memo noncap=0
   name="$(basename "$csv")"
   memo="auto-submit next-window: $name"
   while true; do
@@ -46,7 +46,14 @@ submit_one() {
       sleep 600
       continue
     fi
-    log "non-cap error for $name; giving up on this file"
+    # non-cap error (transient network/API): retry a few times before giving up
+    noncap=$((noncap + 1))
+    if [ "$noncap" -le 5 ]; then
+      log "non-cap error for $name (attempt $noncap/5); retry in 60s"
+      sleep 60
+      continue
+    fi
+    log "non-cap error for $name persisted after 5 retries; giving up on this file"
     return 1
   done
 }

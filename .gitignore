@@ -57,3 +57,4 @@ data/raw/*.csv
 
 # omo/ralph-loop internal
 .omo/
+.dacon_auto_venv/
