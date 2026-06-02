@@ -1,0 +1,13 @@
+defaults: configs/default.yaml
+
+experiment_name: qwen25vl_7b
+model:
+  name: qwen2_5_vl
+  model_id: Qwen/Qwen2.5-VL-7B-Instruct
+  backend: transformers
+  dtype: bfloat16
+  load_in_4bit: true      # youtube 16GB 개발용. A6000 48GB는 false로.
+  max_new_tokens: 128
+  max_pixels: 786432       # 1024 image tokens; avoids OOM on 16GB while TTS uses VRAM.
+prompt:
+  template: bias_guarded

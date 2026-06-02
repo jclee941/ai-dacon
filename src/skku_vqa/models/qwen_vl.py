@@ -17,6 +17,7 @@ class QwenVLModel(VLMModel):
         device_map: str = "auto",
         max_new_tokens: int = 256,
         load_in_4bit: bool = True,
+        max_pixels: int | None = None,
     ) -> None:
         import torch
         from transformers import (
@@ -26,6 +27,7 @@ class QwenVLModel(VLMModel):
         )
 
         self.max_new_tokens = max_new_tokens
+        self.max_pixels = max_pixels
         torch_dtype = getattr(torch, dtype)
 
         quant_config = None
@@ -43,7 +45,10 @@ class QwenVLModel(VLMModel):
             device_map=device_map,
             quantization_config=quant_config,
         )
-        self.processor = AutoProcessor.from_pretrained(model_id)
+        processor_kwargs = {}
+        if max_pixels is not None:
+            processor_kwargs["max_pixels"] = max_pixels
+        self.processor = AutoProcessor.from_pretrained(model_id, **processor_kwargs)
 
     def predict(self, image_path: str | None, prompt: str) -> str:
         from qwen_vl_utils import process_vision_info

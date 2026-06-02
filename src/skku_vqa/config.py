@@ -26,6 +26,7 @@ class ModelConfig(BaseModel):
     device_map: str = "auto"
     max_new_tokens: int = 64
     load_in_4bit: bool = False  # 16GB 개발서버에서 큰 모델을 transformers로 돌릴 때만
+    max_pixels: int | None = None
 
 
 class PromptConfig(BaseModel):
