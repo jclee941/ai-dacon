@@ -39,3 +39,8 @@ Submit next window e.g.: python scripts/submit_dacon.py --submission artifacts/f
 - InternVL3-14B attempted as a stronger 6th candidate but REJECTED: 14B 4bit (~8.5GB) is too tight for ~7GB free VRAM (TTS holds ~8.4GB), and the 290GB host disk was 100% full (model is ~28GB download). Not viable on current infra without freeing disk + stopping TTS.
 - Confirmed viable ceiling on this 16GB box (shared with TTS): ~8-9B VLMs in 4bit (Qwen3-VL-8B, InternVL3-8B). Larger models need the 2nd-stage A6000 48GB env.
 - Next-window top-5 remains the strongest feasible set: qwen3vl_8b, internvl3_8b, qwen3vl_8b_hires, qwen3vl_8b_lowres, qwen25vl_7b.
+
+## Infra status (2026-06-03, loop 12)
+- Host disk 13G free of 290G (96% used). Cannot download additional 8-9B VLMs (~16GB each) for new candidates. The next-window top-5 is the final feasible set on this box.
+- Auto-submit timer dacon-auto-submit.timer active (persistent, linger), next fire Thu 2026-06-04 00:05 KST; will submit the 5 candidates after the daily cap resets.
+- Further score gains require the 2nd-stage A6000 48GB env (larger models) — out of scope for this 16GB box.
