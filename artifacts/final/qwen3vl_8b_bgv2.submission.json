@@ -1,0 +1,20 @@
+{
+  "competition_id": "236722",
+  "team": "qws941",
+  "submission_file": "qwen3vl_8b_bgv2.csv",
+  "model": "Qwen/Qwen3-VL-8B-Instruct",
+  "backend": "transformers",
+  "load_in_4bit": true,
+  "max_pixels": 200704,
+  "max_new_tokens": 64,
+  "prompt_template": "bias_guarded_v2",
+  "rows": 8500,
+  "label_distribution": {"0": 3057, "1": 2587, "2": 2856},
+  "parse_ok": 8500,
+  "submission_vs_raw_mismatch": 0,
+  "full_run_seconds": 1848.03,
+  "sec_per_sample": 0.2174,
+  "differs_from_qwen3vl_8b_labels": 279,
+  "submission_status": "PENDING - prepared candidate; daily cap exhausted, submit next reset",
+  "note": "bias_guarded_v2 = balanced unknown(ambiguous)/specific(disambiguated) prompt; cached model reuse, no new download."
+}
