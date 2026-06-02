@@ -21,5 +21,11 @@
   "dacon_api_result": "not yet submitted (prepared for next window)",
   "submission_status": "PENDING - prepared candidate; submit next reset window",
   "note": "Distinct strong model (InternVL3-8B). InternVL uses 448x448 tiling, not max_pixels. 168 outputs were 'N. <text>' form but parser took leading digit correctly; 0 invalid labels.",
-  "image_tiling": "448x448 tiles, max_patches=12 (InternVLProcessor default; max_pixels not applicable)"
+  "image_tiling": "448x448 tiles, max_patches=12 (InternVLProcessor default; max_pixels not applicable)",
+  "independent_integrity_recheck": {
+    "raw_rows": 8500,
+    "parse_ok": 8500,
+    "invalid_labels": 0,
+    "submission_vs_raw_mismatch": 0
+  }
 }

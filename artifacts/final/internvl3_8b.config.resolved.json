@@ -17,7 +17,7 @@
     "device_map": "auto",
     "max_new_tokens": 64,
     "load_in_4bit": true,
-    "max_pixels": 200704
+    "max_pixels": null
   },
   "prompt": {
     "template": "bias_guarded",
