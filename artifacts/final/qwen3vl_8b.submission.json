@@ -1,0 +1,21 @@
+{
+  "competition_id": "236722",
+  "team": "qws941",
+  "submission_file": "qwen3vl_8b.csv",
+  "model": "Qwen/Qwen3-VL-8B-Instruct",
+  "backend": "transformers",
+  "load_in_4bit": true,
+  "max_pixels": 200704,
+  "max_new_tokens": 64,
+  "prompt_template": "bias_guarded",
+  "rows": 8500,
+  "label_distribution": {"0": 3160, "1": 2528, "2": 2812},
+  "parse_ok": 8500,
+  "raw_output_all_single_digit": true,
+  "full_run_seconds": 2102.16,
+  "sec_per_sample": 0.2473,
+  "dacon_api_result": {"isSubmitted": true, "detail": "Success"},
+  "submitted_at_utc": "2026-06-02",
+  "prior_best": {"file": "qwen25vl_7b.csv", "score": 0.9065833333},
+  "notes": "Qwen3-VL-8B candidate. message-level max_pixels cap fixed OOM on 16GB shared with TTS. Distribution near codeshare 0.99517 {0:2944,1:2750,2:2806}."
+}
