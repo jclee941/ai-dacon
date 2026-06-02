@@ -29,6 +29,6 @@
   },
   "notes": "Qwen3-VL-8B candidate. message-level max_pixels cap fixed OOM on 16GB shared with TTS. Distribution near codeshare 0.99517 {0:2944,1:2750,2:2806}.",
   "score": 0.9586666667,
-  "submitted_at_kst": "2026-06-02 (prior-day window)",
-  "note": "Best score so far. Submitted in the prior day's window, not a fresh post-reset submission."
+  "submitted_at_kst": "2026-06-03",
+  "note": "Best candidate (0.95867). Resubmitted in today's post-reset window as the 5th of 5 fresh submissions."
 }
