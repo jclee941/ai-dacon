@@ -25,13 +25,13 @@
 5. qwen25vl_7b.csv (0.90658)
 All returned dacon_api_result isSubmitted=true detail=Success.
 
-## Selected top-5 for NEXT submission window (prepared, not yet submitted)
+## [SUPERSEDED by "Updated next-window top-5 (loop 14)" below] Selected top-5 (earlier)
 Strongest distinct candidates to submit after the next daily reset:
 1. qwen3vl_8b.csv (confirmed best 0.95867)
 2. internvl3_8b.csv (NEW InternVL3-8B; 1031/8500 labels differ from best; pending)
 3. qwen3vl_8b_hires.csv (confirmed 0.95767)
 4. qwen3vl_8b_lowres.csv (pending; 249 diff from best)
-5. qwen25vl_7b.csv (floor 0.90658)
+5. qwen25vl_7b.csv (floor 0.90658)  <-- SUPERSEDED: replaced by qwen3vl_8b_bgv2.csv in loop 14
 Note: qwen3vl_8b_evidence_only.csv (0.9295) is intentionally EXCLUDED from the next-window top-5 as the weakest candidate.
 Submit next window e.g.: python scripts/submit_dacon.py --submission artifacts/final/internvl3_8b.csv --team qws941
 
