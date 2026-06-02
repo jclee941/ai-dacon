@@ -9,13 +9,26 @@
   "max_new_tokens": 64,
   "prompt_template": "bias_guarded",
   "rows": 8500,
-  "label_distribution": {"0": 3160, "1": 2528, "2": 2812},
+  "label_distribution": {
+    "0": 3160,
+    "1": 2528,
+    "2": 2812
+  },
   "parse_ok": 8500,
   "raw_output_all_single_digit": true,
   "full_run_seconds": 2102.16,
   "sec_per_sample": 0.2473,
-  "dacon_api_result": {"isSubmitted": true, "detail": "Success"},
+  "dacon_api_result": {
+    "isSubmitted": true,
+    "detail": "Success"
+  },
   "submitted_at_utc": "2026-06-02",
-  "prior_best": {"file": "qwen25vl_7b.csv", "score": 0.9065833333},
-  "notes": "Qwen3-VL-8B candidate. message-level max_pixels cap fixed OOM on 16GB shared with TTS. Distribution near codeshare 0.99517 {0:2944,1:2750,2:2806}."
+  "prior_best": {
+    "file": "qwen25vl_7b.csv",
+    "score": 0.9065833333
+  },
+  "notes": "Qwen3-VL-8B candidate. message-level max_pixels cap fixed OOM on 16GB shared with TTS. Distribution near codeshare 0.99517 {0:2944,1:2750,2:2806}.",
+  "score": 0.9586666667,
+  "submitted_at_kst": "2026-06-02 (prior-day window)",
+  "note": "Best score so far. Submitted in the prior day's window, not a fresh post-reset submission."
 }
