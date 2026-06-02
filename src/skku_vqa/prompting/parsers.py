@@ -22,8 +22,10 @@ def parse_label(raw: str, num_options: int) -> int | None:
         if 0 <= n < num_options:
             return n
 
-    # 그 외 첫 번째 유효 범위 정수
-    for token in re.findall(r"\d+", text):
+    # 마커가 없으면: 끝에서부터 '단독 숫자'(앞뒤가 숫자가 아닌)를 우선 채택.
+    # CoT/verbose 출력에서 reasoning 중 언급된 번호 대신 최종 답을 잡기 위함.
+    standalone = re.findall(r"(?<!\d)(\d+)(?!\d)", text)
+    for token in reversed(standalone):
         n = int(token)
         if 0 <= n < num_options:
             return n
