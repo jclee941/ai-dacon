@@ -44,3 +44,12 @@ Submit next window e.g.: python scripts/submit_dacon.py --submission artifacts/f
 - Host disk 13G free of 290G (96% used). Cannot download additional 8-9B VLMs (~16GB each) for new candidates. The next-window top-5 is the final feasible set on this box.
 - Auto-submit timer dacon-auto-submit.timer active (persistent, linger), next fire Thu 2026-06-04 00:05 KST; will submit the 5 candidates after the daily cap resets.
 - Further score gains require the 2nd-stage A6000 48GB env (larger models) — out of scope for this 16GB box.
+
+## Updated next-window top-5 (loop 14)
+Replaced weakest qwen25vl_7b (0.90658) with qwen3vl_8b_bgv2 (bias_guarded_v2 prompt, 279-label diff from best):
+1. qwen3vl_8b.csv (0.95867 best)
+2. internvl3_8b.csv (NEW model, 1031 diff)
+3. qwen3vl_8b_hires.csv (0.95767)
+4. qwen3vl_8b_lowres.csv (pending)
+5. qwen3vl_8b_bgv2.csv (NEW prompt, 279 diff; cached-model reuse, no download)
+Auto-submit script (scripts/auto_submit_next_window.sh) updated to this set.

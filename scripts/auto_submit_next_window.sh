@@ -18,7 +18,7 @@ CANDIDATES=(
   "artifacts/final/internvl3_8b.csv"
   "artifacts/final/qwen3vl_8b_hires.csv"
   "artifacts/final/qwen3vl_8b_lowres.csv"
-  "artifacts/final/qwen25vl_7b.csv"
+  "artifacts/final/qwen3vl_8b_bgv2.csv"
 )
 
 log() { echo "[$(date '+%F %T %Z')] $*" | tee -a "$LOG"; }
