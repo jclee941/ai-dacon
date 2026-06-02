@@ -5,14 +5,14 @@
   "parse_ok": 8500,
   "raw_output_all_single_digit": true,
   "submission_vs_raw_mismatch": 0,
-  "submission_file": "qwen3vl_8b_hires.csv",
+  "submission_file": "qwen3vl_8b_lowres.csv",
   "model": "Qwen/Qwen3-VL-8B-Instruct",
   "prompt": "bias_guarded",
-  "max_pixels": 786432,
+  "max_pixels": 100352,
   "dacon_api_result": {
     "isSubmitted": true,
     "detail": "Success"
   },
-  "submitted_at_kst": "2026-06-03 00:21",
-  "score": 0.9576666667
+  "submitted_at_kst": "2026-06-03",
+  "score": "pending"
 }
