@@ -12,6 +12,8 @@ TEAM="${1:-qws941}"
 LOG=/tmp/dacon_auto_submit.log
 WHL=/tmp/dacon_submit_api-0.1.2-py3-none-any.whl
 VENV="$REPO/.dacon_auto_venv"   # repo-local so it survives reboot (not /tmp)
+STATE="$REPO/.dacon_auto_state" # idempotency markers: <name>.done per submitted file
+mkdir -p "$STATE"
 
 CANDIDATES=(
   "artifacts/final/qwen3vl_8b.csv"
@@ -39,6 +41,7 @@ submit_one() {
     out="$("$VENV/bin/python" scripts/submit_dacon.py --submission "$csv" --team "$TEAM" --memo "$memo" 2>&1)"
     log "submit $name -> $out"
     if echo "$out" | grep -q "isSubmitted': True"; then
+      touch "$STATE/$name.done"
       return 0
     fi
     if echo "$out" | grep -qi "Over max submission count"; then
@@ -60,6 +63,11 @@ submit_one() {
 
 for c in "${CANDIDATES[@]}"; do
   [ -f "$c" ] || { log "MISSING $c"; continue; }
+  if [ -f "$STATE/$(basename "$c").done" ]; then
+    log "SKIP $(basename "$c") (already submitted; idempotency marker present)"
+    continue
+  fi
+
   submit_one "$c"
   sleep 5
 done
