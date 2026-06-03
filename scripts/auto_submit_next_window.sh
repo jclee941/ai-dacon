@@ -36,12 +36,15 @@ notify() {
     -d chat_id="$chat" --data-urlencode text="$msg" >/dev/null 2>&1 || true
 }
 
+# Fatal exit with notification, so a midnight failure is never silent.
+fail() { log "$1"; notify "DACON auto-submit FAILED: $1 (team $TEAM). See $LOG"; exit 1; }
+
 log "auto-submit start; team=$TEAM repo=$REPO"
 
 # Build isolated venv if missing
 if [ ! -x "$VENV/bin/python" ]; then
-  curl -fsSL -o "$WHL" "https://cfiles.dacon.co.kr/competitions/api/dacon_submit_api-0.1.2-py3-none-any.whl" || { log "wheel download failed"; exit 1; }
-  python3 -m venv "$VENV" && "$VENV/bin/pip" install -q "$WHL" || { log "venv/install failed"; exit 1; }
+  curl -fsSL -o "$WHL" "https://cfiles.dacon.co.kr/competitions/api/dacon_submit_api-0.1.2-py3-none-any.whl" || fail "wheel download failed"
+  python3 -m venv "$VENV" && "$VENV/bin/pip" install -q "$WHL" || fail "venv/install failed"
 fi
 
 # Preflight: validate env/token/file/api for every candidate before posting anything.
@@ -49,8 +52,7 @@ fi
 # the daily-cap window on doomed submissions.
 for c in "${CANDIDATES[@]}"; do
   if ! out="$("$VENV/bin/python" scripts/submit_dacon.py --submission "$c" --team "$TEAM" --dry-run 2>&1)"; then
-    log "PREFLIGHT FAILED for $(basename "$c"): $out"
-    exit 1
+    fail "PREFLIGHT FAILED for $(basename "$c"): $out"
   fi
   log "preflight ok: $(basename "$c")"
 done

@@ -75,6 +75,6 @@ Auto-submit script (scripts/auto_submit_next_window.sh) updated to this set.
 - Tests: tests/test_submit_dry_run.py covers dry-run OK / missing-token-fails / missing-file-fails (uses the venv python for the import check). Suite 56 passed.
 
 ## Hardening (loop 23): observability via Telegram notification
-- auto_submit_next_window.sh now sends a Telegram message at both exit points: success ("all 5 candidates submitted") and failure ("FAILED for N candidate(s), see log"). Makes a silent midnight miss observable by a human.
+- auto_submit_next_window.sh notifies Telegram on EVERY exit: success ("all 5 candidates submitted"), aggregate per-candidate failure, AND every early fatal exit (wheel download / venv install / preflight failure) via a `fail()` helper. No exit path is silent — a midnight miss is always observable.
 - Opt-in design: reads TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID from .env (gitignored, no hardcoded secrets). If absent, notify() returns 0 silently — zero regression to the submit flow.
-- Verified end-to-end NOW: real test message delivered (telegram ok=True), and the no-creds fallback returns 0 (silent skip).
+- Verified end-to-end NOW: real success-style and fail()-style test messages delivered (telegram ok=True); the no-creds fallback returns 0 (silent skip) so notify() can never break or change the submit exit code.
