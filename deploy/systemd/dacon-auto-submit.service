@@ -4,3 +4,5 @@ Description=DACON auto-submit next-window top-5 candidates (team qws941)
 [Service]
 Type=oneshot
 ExecStart=/home/jclee/dev/ai-dacon/scripts/auto_submit_next_window.sh qws941
+# Script may loop for hours waiting for the daily-cap reset; never let systemd kill it.
+TimeoutStartSec=infinity

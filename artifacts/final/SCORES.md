@@ -78,3 +78,6 @@ Auto-submit script (scripts/auto_submit_next_window.sh) updated to this set.
 - auto_submit_next_window.sh notifies Telegram on EVERY exit: success ("all 5 candidates submitted"), aggregate per-candidate failure, AND every early fatal exit (wheel download / venv install / preflight failure) via a `fail()` helper. No exit path is silent — a midnight miss is always observable.
 - Opt-in design: reads TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID from .env (gitignored, no hardcoded secrets). If absent, notify() returns 0 silently — zero regression to the submit flow.
 - Verified end-to-end NOW: real success-style and fail()-style test messages delivered (telegram ok=True); the no-creds fallback returns 0 (silent skip) so notify() can never break or change the submit exit code.
+
+## Hardening (loop 25): systemd timeout reproducibility
+- dacon-auto-submit.service now declares `TimeoutStartSec=infinity` (deploy copy + installed unit, daemon-reloaded). The auto-submit script can loop for hours waiting for the daily-cap reset (10-min retry); without this, a host whose DefaultTimeoutStartSec is finite would SIGTERM the oneshot mid-wait and silently miss the window. Effective value confirmed `TimeoutStartUSec=infinity`; timer still enabled, next fire Thu 2026-06-04 00:05 KST.
