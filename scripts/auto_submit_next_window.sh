@@ -25,6 +25,17 @@ CANDIDATES=(
 
 log() { echo "[$(date '+%F %T %Z')] $*" | tee -a "$LOG"; }
 
+# Optional Telegram notification (opt-in). Silently skipped if .env lacks the keys,
+# so this never breaks the submit flow. Reads TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID.
+notify() {
+  local msg="$1" tok chat
+  tok="$(grep -E '^TELEGRAM_BOT_TOKEN=' .env 2>/dev/null | head -1 | cut -d= -f2-)"
+  chat="$(grep -E '^TELEGRAM_CHAT_ID=' .env 2>/dev/null | head -1 | cut -d= -f2-)"
+  [ -n "$tok" ] && [ -n "$chat" ] || return 0
+  curl -fsS -m 20 -X POST "https://api.telegram.org/bot$tok/sendMessage" \
+    -d chat_id="$chat" --data-urlencode text="$msg" >/dev/null 2>&1 || true
+}
+
 log "auto-submit start; team=$TEAM repo=$REPO"
 
 # Build isolated venv if missing
@@ -86,6 +97,8 @@ done
 
 if [ "$failures" -ne 0 ]; then
   log "auto-submit FAILED for $failures candidate(s)"
+  notify "DACON auto-submit FAILED for $failures candidate(s) (team $TEAM). See $LOG"
   exit 1
 fi
 log "auto-submit done; all candidates submitted or already marked"
+notify "DACON auto-submit OK: all 5 candidates submitted (team $TEAM)."

@@ -73,3 +73,8 @@ Auto-submit script (scripts/auto_submit_next_window.sh) updated to this set.
 - Ran the preflight NOW on all 5 candidates via the pre-built venv: every one returned `DRY-RUN OK` (token+comp+file+api verified).
 - auto_submit_next_window.sh: runs the preflight for every candidate up front; if any fails it logs PREFLIGHT FAILED and exits 1 before posting anything (does not burn the daily-cap window on doomed submissions).
 - Tests: tests/test_submit_dry_run.py covers dry-run OK / missing-token-fails / missing-file-fails (uses the venv python for the import check). Suite 56 passed.
+
+## Hardening (loop 23): observability via Telegram notification
+- auto_submit_next_window.sh now sends a Telegram message at both exit points: success ("all 5 candidates submitted") and failure ("FAILED for N candidate(s), see log"). Makes a silent midnight miss observable by a human.
+- Opt-in design: reads TELEGRAM_BOT_TOKEN / TELEGRAM_CHAT_ID from .env (gitignored, no hardcoded secrets). If absent, notify() returns 0 silently — zero regression to the submit flow.
+- Verified end-to-end NOW: real test message delivered (telegram ok=True), and the no-creds fallback returns 0 (silent skip).
