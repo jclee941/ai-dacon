@@ -7,6 +7,7 @@
 | qwen3vl_8b_evidence_only.csv | Qwen3-VL-8B 4bit, evidence_only, max_pixels 786432 | 0.9295 |
 | qwen3vl_8b_lowres.csv | Qwen3-VL-8B 4bit, bias_guarded, max_pixels 100352 | 0.95683 |
 | internvl3_8b.csv | InternVL3-8B 4bit, bias_guarded, 448x448 tiling | not yet submitted |
+| qwen3vl_8b_bgv2.csv | Qwen3-VL-8B 4bit, bias_guarded_v2, max_pixels 200704 | not yet submitted |
 | qwen25vl_7b.csv | Qwen2.5-VL-7B 4bit, bias_guarded | 0.90658 |
 | qwen25vl_7b_mp1m.csv | Qwen2.5-VL-7B, higher-res | 0.90458 |
 | baseline_llava_ov_transformers.csv | LLaVA-OV-0.5B | 0.469 |
