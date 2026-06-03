@@ -87,3 +87,11 @@ Auto-submit script (scripts/auto_submit_next_window.sh) updated to this set.
 - qwen3vl_8b_lowres.csv scored 0.95683 (was pending). Full confirmed ranking: qwen3vl_8b 0.95867 (best) > hires 0.95767 > lowres 0.95683 > evidence_only 0.9295 > qwen25vl_7b 0.90658 > mp1m 0.90458 > llava 0.469 > all-zero 0.34083.
 - Of the next-window top-5, THREE are already scored (qwen3vl_8b 0.95867, hires 0.95767, lowres 0.95683). Re-submitting them is harmless (idempotent) but yields no new info.
 - The only UNSCORED candidates are internvl3_8b.csv and qwen3vl_8b_bgv2.csv. The next window's real value = learning whether either beats 0.95867. internvl3_8b differs from best on 1031/8500 labels (genuinely different model); bgv2 differs on 279/8500 (prompt variant). Neither is guaranteed to beat best; qwen3vl_8b remains the safe top pick already locked in at 0.95867.
+
+## Model survey (loop 25, librarian bg_b7c9b956) — validates current pool
+- Searched for transformers-4.57-compatible VLMs that could BEAT Qwen3-VL-8B (0.95867) in 4bit on ~7GB free VRAM. Decisive result:
+  - Qwen3-VL-30B-A3B (MoE): REJECTED — 31B total params ≈ 15.5GB at 4bit (all experts must be VRAM-resident even with 3B active); >7GB budget. class Qwen3VLMoeForConditionalGeneration exists in 4.57 but infeasible here.
+  - Qwen3-VL-8B-Thinking: REJECTED — fits (~5GB) but CoT generates hundreds of extra tokens/sample, blows the 0.5s/sample budget; reasoning gains are STEM-oriented, not BBQ-relevant.
+  - InternVL3-8B-hf: #1 PICK — ~4.9GB 4bit, native transformers 4.57, strongest MMMU/MMStar position. ALREADY in our pool as internvl3_8b.csv (unscored, queued for next window). Survey confirms it was the right new candidate.
+  - InternVL2.5-8B: #2 fallback — ~4-5GB 4bit but needs trust_remote_code and trails InternVL3 by ~3-5% MMMU. Only worth trying on the inference host (youtube 192.168.50.220), NOT here.
+- This box (jclee-dev) has NO GPU and NO Qwen3-VL/InternVL weights — new candidate CSVs cannot be generated here; inference runs on youtube 192.168.50.220. So the survey changes nothing actionable now: the next-window pool already contains the survey's #1 recommendation. Larger/stronger models remain a 2nd-stage A6000 48GB option.
