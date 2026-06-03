@@ -1,0 +1,22 @@
+# FINAL reproduction config (2nd-stage evaluation snapshot)
+# Winning candidate: qwen3vl_8b bias_guarded max_pixels 200704 -> DACON 0.95867 (best).
+# `make reproduce` runs run_inference + make_submission on this config.
+#
+# 2nd-stage env (RTX A6000 48GB, offline): load_in_4bit may be set to false for bf16
+# (48GB easily fits Qwen3-VL-8B bf16); kept true here to match the exact scored run on
+# the 16GB dev box. max_pixels 200704 was the highest-scoring resolution (>= 786432).
+# Model: Qwen/Qwen3-VL-8B-Instruct (public weights, pre-2026-05-31). Final label parsed
+# from LLM output (no rule override). Inference ~0.25 s/sample, well under 0.5s budget.
+defaults: configs/default.yaml
+
+experiment_name: qwen3vl_8b
+model:
+  name: qwen3_vl
+  model_id: Qwen/Qwen3-VL-8B-Instruct
+  backend: transformers
+  dtype: bfloat16
+  load_in_4bit: true
+  max_new_tokens: 64
+  max_pixels: 200704
+prompt:
+  template: bias_guarded
