@@ -28,3 +28,23 @@
 ## 우리 인프라
 - 개발/추론: `youtube`(192.168.50.220) — Ubuntu 24.04, RTX 5070 Ti **16GB**, Py3.12.
 - 16GB 한계: LLaVA-OV-0.5B/7B는 vLLM으로 가능. 큰 모델은 4bit(transformers) 또는 회피.
+
+## 제출 운영 runbook (자정 자동 제출 + 수동 백업)
+다음 제출창(매일 00:05 KST 한도 리셋)에는 systemd user 타이머 `dacon-auto-submit.timer`가
+`scripts/auto_submit_next_window.sh qws941`을 자동 실행하여 top-5 후보를 제출한다.
+각 단계는 멱등(.dacon_auto_state/<name>.done), cap-safe(한도 시 10분 재시도), preflight 검증,
+전 exit Telegram 알림을 포함한다.
+
+**타이머가 어떤 이유로든 발화하지 않으면(수동 백업):**
+```bash
+cd /home/jclee/dev/ai-dacon
+# 전체 5개 자동(권장; 멱등하므로 중복 제출 안 함):
+./scripts/auto_submit_next_window.sh qws941
+# 또는 후보 1개씩 직접:
+.dacon_auto_venv/bin/python scripts/submit_dacon.py \
+  --submission artifacts/final/qwen3vl_8b.csv --team qws941
+```
+- 사전 점검(제출 없이): `... scripts/submit_dacon.py --submission <csv> --team qws941 --dry-run`
+- 인자 이름은 `--submission`(파일 경로), `--team`(qws941). 토큰/대회ID는 `.env`에서 자동 로드.
+- 상태 확인: `systemctl --user list-timers dacon-auto-submit.timer`, 로그 `/tmp/dacon_auto_submit.log`.
+- 후보 5개: qwen3vl_8b(best 0.95867), internvl3_8b, qwen3vl_8b_hires, qwen3vl_8b_lowres, qwen3vl_8b_bgv2 (artifacts/final/).
