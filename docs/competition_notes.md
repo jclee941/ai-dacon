@@ -48,3 +48,31 @@ cd /home/jclee/dev/ai-dacon
 - 인자 이름은 `--submission`(파일 경로), `--team`(qws941). 토큰/대회ID는 `.env`에서 자동 로드.
 - 상태 확인: `systemctl --user list-timers dacon-auto-submit.timer`, 로그 `/tmp/dacon_auto_submit.log`.
 - 후보 5개: qwen3vl_8b(best 0.95867), internvl3_8b, qwen3vl_8b_hires, qwen3vl_8b_lowres, qwen3vl_8b_bgv2 (artifacts/final/).
+
+## 신규 아이디어 후보 생성 runbook (GPU 호스트 전용)
+evidence_receipt 프롬프트와 Qwen3-VL-32B는 코드/설정은 적용 완료(테스트 통과)지만, CSV는
+GPU 호스트(`youtube` 192.168.50.220 / 2차 A6000 48GB)에서만 생성 가능하다 (dev 박스 GPU 없음).
+각 후보를 다음 절차로 생성·검증한 뒤에야 제출 풀에 넣을 수 있다.
+
+```bash
+cd /home/jclee/dev/ai-dacon   # on the GPU host
+# (1) evidence_receipt 프롬프트 후보 (현재 16GB 박스에서 8B 4bit로 가능)
+python scripts/run_inference.py --config configs/experiment/qwen3vl_8b_evidence_receipt.yaml
+python scripts/make_submission.py --config configs/experiment/qwen3vl_8b_evidence_receipt.yaml
+python scripts/validate_submission.py \
+  --submission outputs/submissions/qwen3vl_8b_evidence_receipt.csv
+
+# (2) Qwen3-VL-32B 천장 후보 (A6000 48GB 필요; 16GB 박스에서는 OOM)
+python scripts/run_inference.py --config configs/experiment/qwen3vl_32b.yaml
+python scripts/make_submission.py --config configs/experiment/qwen3vl_32b.yaml
+python scripts/validate_submission.py --submission outputs/submissions/qwen3vl_32b.csv
+```
+
+- 라벨이 LLM에서 파싱됐는지 수동 감사: `outputs/predictions/<exp>/raw_outputs.jsonl`의 `parse_ok`/`retried`
+  (이 jsonl은 감사용이며 `validate_local.py`의 입력이 아니다 — 해당 스크립트는 CSV만 읽는다).
+- 그룹 라벨이 있는 로컬 train으로 효과 게이트 (입력은 make_submission 산출 CSV):
+  `python scripts/validate_local.py --train-csv <train.csv> --predictions outputs/submissions/<exp>.csv`
+  (make_submission CSV는 sample_id,label만 가지므로 parse_fail_rate는 0으로 나온다; parse 감사는 위 jsonl로 한다).
+- 0.95867을 이기면 그때 후보 CSV를 `artifacts/final/`로 복사하고 `scripts/auto_submit_next_window.sh`의
+  CANDIDATES 풀을 갱신한다 (1일 5회 한도 — 약한 후보 1개와 교체). 풀 변경 시 `tests/test_auto_submit_pool.py`도 갱신.
+- 타이밍 확인 필수: `outputs/predictions/<exp>/timing.json`의 `sec_per_sample` ≤ 0.5 (32B/evidence_receipt는 초과 위험).

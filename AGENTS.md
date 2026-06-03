@@ -10,8 +10,8 @@
 - Pipeline: `make prepare` → `make infer` → `make submit` → `make validate`. `make reproduce` runs the locked final config.
 - `pytest` uses `pythonpath=["src"]`, so tests import `skku_vqa` without install; runtime scripts insert `src` on `sys.path` themselves.
 
-## Caveat: stale Makefile target
-`make infer` points at `configs/experiment/zero_shot_qwen.yaml`, which does **not** exist. Run inference directly against a real config instead, e.g.
+## Caveat: stale Makefile targets
+Three Make targets point at configs that do **not** exist: `make infer` → `configs/experiment/zero_shot_qwen.yaml`, `make ensemble` / `make submit` → `configs/experiment/ensemble_v1.yaml`. Run scripts directly against a real config (pick from `configs/experiment/*.yaml`), e.g.
 `python scripts/run_inference.py --config configs/experiment/qwen3vl_8b.yaml [--limit N]`.
 `--limit N` runs a smoke subset.
 
@@ -39,8 +39,10 @@ These are referenced in source as "규칙 #N". Violating them disqualifies the s
 ## Models
 `models/loader.py` dispatches by `model.name` prefix: `llava*` (backend `vllm` default or `transformers`), `internvl*`, `qwen3_vl*`, `qwen*`. `backend=transformers` path supports `load_in_4bit`; vLLM path does not.
 
+**Inference needs a GPU and does not run on the dev box.** Per `artifacts/final/SCORES.md`, `jclee-dev` has no GPU/weights; new prediction CSVs are generated on the inference host `youtube 192.168.50.220`. Editing/testing/validation is fine here; running `run_inference.py` against a real model is not. Confirmed ceiling on the 16GB inference box: ~8–9B VLMs in 4bit (Qwen3-VL-8B, InternVL3-8B); larger models need the 2nd-stage A6000 48GB env.
+
 ## Source layout
-- `src/skku_vqa/` — `data/` (schema, dataset, validation), `prompting/` (builders, parsers, templates), `models/`, `inference/predictor.py`, `ensemble/`, `submission/`, `evaluation/`, `ambiguity/`, `training/` (LoRA), `utils/`, `cli.py`.
+- `src/skku_vqa/` — `data/` (schema, dataset, validation), `prompting/` (builders, parsers, templates), `models/`, `inference/predictor.py`, `submission/`, `evaluation/`, `ambiguity/`, `utils/`, `config.py`, `constants.py`, `cli.py`. (No `ensemble/` or `training/` package currently exists despite README/strategy mentions.)
 - `scripts/` — `run_inference.py`, `make_submission.py`, `validate_submission.py`, `reproduce_submission.py`, `submit_dacon.py`, `auto_submit_next_window.sh`.
 - `docs/` — `competition_notes.md` (rules, infra, submission runbook), `reproducibility.md`, `prompt_strategy.md`. Read these before changing pipeline behavior.
 
