@@ -1,0 +1,18 @@
+defaults: configs/default.yaml
+
+experiment_name: qwen3vl_8b_ensemble
+model:
+  name: qwen3_vl
+  model_id: Qwen/Qwen3-VL-8B-Instruct
+  backend: transformers
+  dtype: bfloat16
+  load_in_4bit: true
+  max_new_tokens: 256      # variants + synthesis are verbose; budget for ANSWER: line
+  max_pixels: 200704
+prompt:
+  # LLM-synthesis ensemble (규칙 #5): K variant analyses -> final LLM synthesizes ANSWER.
+  # NOTE: ~K+1 model calls/sample -> watch the 0.5s/sample budget (timing.json).
+  ensemble_templates:
+    - bias_guarded_v2
+    - evidence_receipt
+    - evidence_then_answer

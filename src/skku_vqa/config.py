@@ -27,12 +27,21 @@ class ModelConfig(BaseModel):
     max_new_tokens: int = 64
     load_in_4bit: bool = False  # 16GB 개발서버에서 큰 모델을 transformers로 돌릴 때만
     max_pixels: int | None = None
+    # CPU offload: VRAM이 부족해 4bit 모델이 GPU에 다 안 올라갈 때 사용.
+    # cpu_offload=True면 bnb llm_int8_enable_fp32_cpu_offload를 켜고,
+    # gpu_max_memory(예 "6GiB")로 GPU 할당을 제한해 나머지를 CPU로 보낸다.
+    cpu_offload: bool = False
+    gpu_max_memory: str | None = None
+    cpu_max_memory: str | None = None
 
 
 class PromptConfig(BaseModel):
     template: str = "bias_guarded"
     include_cot: bool = False
     output_format: str = "number_only"
+    # LLM-합성 앵상블 모드: 이 템플릿들로 K개 분석 수집 후
+    # 최종 답은 LLM이 종합 생성(규칙 #5). None이면 단일 템플릿 모드.
+    ensemble_templates: list[str] | None = None
 
 
 class InferenceConfig(BaseModel):
