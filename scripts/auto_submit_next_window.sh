@@ -61,15 +61,20 @@ submit_one() {
   done
 }
 
+failures=0
 for c in "${CANDIDATES[@]}"; do
-  [ -f "$c" ] || { log "MISSING $c"; continue; }
+  [ -f "$c" ] || { log "MISSING $c"; failures=$((failures + 1)); continue; }
   if [ -f "$STATE/$(basename "$c").done" ]; then
     log "SKIP $(basename "$c") (already submitted; idempotency marker present)"
     continue
   fi
 
-  submit_one "$c"
+  submit_one "$c" || failures=$((failures + 1))
   sleep 5
 done
 
-log "auto-submit done"
+if [ "$failures" -ne 0 ]; then
+  log "auto-submit FAILED for $failures candidate(s)"
+  exit 1
+fi
+log "auto-submit done; all candidates submitted or already marked"

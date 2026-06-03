@@ -63,3 +63,7 @@ Auto-submit script (scripts/auto_submit_next_window.sh) updated to this set.
 - Pre-built the repo-local isolated venv `.dacon_auto_venv` (gitignored) with `dacon_submit_api-0.1.2` BEFORE the midnight fire, so the timer no longer depends on curl/network/wheel availability at 00:05.
 - Verified import chain under that venv: `submit_dacon.py` -> `skku_vqa.submission.dacon` (src) + `dacon_submit_api.post_submission_file`. Bootstrap now skips (venv exists); script `VENV` path matches the pre-built one.
 - Timer next fire: Thu 2026-06-04 00:05 KST (enabled, active waiting).
+
+## Hardening (loop 21): final root = exactly the 5 next-window CSVs
+- Moved already-submitted, non-next-window candidates `qwen25vl_7b.csv` (0.90658) and `qwen3vl_8b_evidence_only.csv` (0.9295) to `artifacts/final/superseded/` so the final root holds EXACTLY the 5 canonical next-window CSVs (qwen3vl_8b, internvl3_8b, qwen3vl_8b_hires, qwen3vl_8b_lowres, qwen3vl_8b_bgv2). Receipts preserved, not deleted.
+- auto_submit_next_window.sh: idempotency markers (.dacon_auto_state/<name>.done, gitignored) skip already-succeeded candidates on re-fire (cap-safe); marker write guarded; per-candidate failures are now counted and propagated to a non-zero script exit so systemd reflects partial-submission failure instead of false success.
