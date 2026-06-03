@@ -12,5 +12,6 @@ def test_final_config_matches_best_candidate() -> None:
     assert cfg.model.model_id == "Qwen/Qwen3-VL-8B-Instruct"
     assert cfg.model.dtype == "bfloat16"
     assert cfg.model.max_pixels == 200704
+    assert cfg.model.load_in_4bit is True
     assert cfg.prompt.template == "bias_guarded"
     assert cfg.model.max_new_tokens == 64
