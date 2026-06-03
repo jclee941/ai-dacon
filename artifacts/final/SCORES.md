@@ -15,7 +15,7 @@
 ## Learnings
 - Model is the big lever: Qwen2.5-VL-7B 0.9066 -> Qwen3-VL-8B 0.9587.
 - bias_guarded >> evidence_only (0.958 vs 0.9295) for this BBQ task.
-- Higher resolution does NOT help: max_pixels 200704 scored 0.95867 > 786432 scored 0.95767; lowres 100352 ~ same.
+- Higher resolution does NOT help: max_pixels 200704 scored 0.95867 > 786432 scored 0.95767; lowres 100352 remains pending.
 
 ## Already submitted (KST 2026-06-03 window, all 5 daily slots used)
 1. qwen3vl_8b.csv (200704, best 0.95867)
