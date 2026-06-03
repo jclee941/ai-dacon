@@ -1,0 +1,13 @@
+defaults: configs/default.yaml
+
+experiment_name: qwen3vl_8b_evidence_receipt
+model:
+  name: qwen3_vl
+  model_id: Qwen/Qwen3-VL-8B-Instruct
+  backend: transformers
+  dtype: bfloat16
+  load_in_4bit: true
+  max_new_tokens: 256      # evidence_receipt is verbose (per-option lines + ANSWER:)
+  max_pixels: 200704
+prompt:
+  template: evidence_receipt
