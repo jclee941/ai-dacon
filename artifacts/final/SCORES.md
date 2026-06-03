@@ -58,3 +58,8 @@ Auto-submit script (scripts/auto_submit_next_window.sh) updated to this set.
 - InternVL3-8B + bias_guarded_v2 vs InternVL3-8B + bias_guarded: only 2/128 labels differ (near-identical). The SAME prompt swap on Qwen3-VL gave 279/8500 diff.
 - Conclusion: bias_guarded_v2 meaningfully changes Qwen3-VL but is a near no-op on InternVL3. The internvl3_8b_bgv2 candidate was rejected as a non-distinct duplicate and NOT added to the pool.
 - Canonical next-window top-5 unchanged: qwen3vl_8b, internvl3_8b, qwen3vl_8b_hires, qwen3vl_8b_lowres, qwen3vl_8b_bgv2.
+
+## Hardening (loop 20): auto-submit runtime risk removed
+- Pre-built the repo-local isolated venv `.dacon_auto_venv` (gitignored) with `dacon_submit_api-0.1.2` BEFORE the midnight fire, so the timer no longer depends on curl/network/wheel availability at 00:05.
+- Verified import chain under that venv: `submit_dacon.py` -> `skku_vqa.submission.dacon` (src) + `dacon_submit_api.post_submission_file`. Bootstrap now skips (venv exists); script `VENV` path matches the pre-built one.
+- Timer next fire: Thu 2026-06-04 00:05 KST (enabled, active waiting).
