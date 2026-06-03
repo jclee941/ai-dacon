@@ -33,6 +33,17 @@ if [ ! -x "$VENV/bin/python" ]; then
   python3 -m venv "$VENV" && "$VENV/bin/pip" install -q "$WHL" || { log "venv/install failed"; exit 1; }
 fi
 
+# Preflight: validate env/token/file/api for every candidate before posting anything.
+# Catches a bad token, missing file, or broken venv up front instead of burning
+# the daily-cap window on doomed submissions.
+for c in "${CANDIDATES[@]}"; do
+  if ! out="$("$VENV/bin/python" scripts/submit_dacon.py --submission "$c" --team "$TEAM" --dry-run 2>&1)"; then
+    log "PREFLIGHT FAILED for $(basename "$c"): $out"
+    exit 1
+  fi
+  log "preflight ok: $(basename "$c")"
+done
+
 submit_one() {
   local csv="$1" name memo noncap=0
   name="$(basename "$csv")"

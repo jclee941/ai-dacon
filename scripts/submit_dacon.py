@@ -23,12 +23,28 @@ def main() -> None:
     ap.add_argument("--team", required=True)
     ap.add_argument("--env", default=".env")
     ap.add_argument("--memo", default="")
+    ap.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="preflight: validate env/token/file/import without posting to DACON",
+    )
     args = ap.parse_args()
 
     env = load_env(args.env)
     token = env.get("DACON_TOKEN", "")
     comp = env.get("DACON_COMPETITION_ID", "")
+    submission = Path(args.submission)
+    if not submission.is_file():
+        print(f"[submit_dacon] submission file not found: {submission}", file=sys.stderr)
+        sys.exit(1)
     call_args = build_submission_args(args.submission, token, comp, args.team, args.memo)
+
+    if args.dry_run:
+        from dacon_submit_api import dacon_submit_api  # import must succeed
+
+        assert hasattr(dacon_submit_api, "post_submission_file")
+        print(f"[submit_dacon] DRY-RUN OK: {submission.name} ready (token+comp+file+api verified)")
+        return
 
     from dacon_submit_api import dacon_submit_api
 

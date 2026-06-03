@@ -67,3 +67,9 @@ Auto-submit script (scripts/auto_submit_next_window.sh) updated to this set.
 ## Hardening (loop 21): final root = exactly the 5 next-window CSVs
 - Moved already-submitted, non-next-window candidates `qwen25vl_7b.csv` (0.90658) and `qwen3vl_8b_evidence_only.csv` (0.9295) to `artifacts/final/superseded/` so the final root holds EXACTLY the 5 canonical next-window CSVs (qwen3vl_8b, internvl3_8b, qwen3vl_8b_hires, qwen3vl_8b_lowres, qwen3vl_8b_bgv2). Receipts preserved, not deleted.
 - auto_submit_next_window.sh: idempotency markers (.dacon_auto_state/<name>.done, gitignored) skip already-succeeded candidates on re-fire (cap-safe); marker write guarded; per-candidate failures are now counted and propagated to a non-zero script exit so systemd reflects partial-submission failure instead of false success.
+
+## Hardening (loop 22): pre-midnight preflight (--dry-run)
+- Added `--dry-run` to submit_dacon.py: validates .env token + competition_id + submission file existence + dacon_submit_api import, WITHOUT posting to DACON. Lets us confirm BEFORE midnight that the timer won't fail on all 5 candidates due to a bad token / missing file / broken venv.
+- Ran the preflight NOW on all 5 candidates via the pre-built venv: every one returned `DRY-RUN OK` (token+comp+file+api verified).
+- auto_submit_next_window.sh: runs the preflight for every candidate up front; if any fails it logs PREFLIGHT FAILED and exits 1 before posting anything (does not burn the daily-cap window on doomed submissions).
+- Tests: tests/test_submit_dry_run.py covers dry-run OK / missing-token-fails / missing-file-fails (uses the venv python for the import check). Suite 56 passed.
