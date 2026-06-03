@@ -4,7 +4,7 @@
 #
 # 2nd-stage env (RTX A6000 48GB, offline): load_in_4bit may be set to false for bf16
 # (48GB easily fits Qwen3-VL-8B bf16); kept true here to match the exact scored run on
-# the 16GB dev box. max_pixels 200704 scored highest (0.95867) vs 786432 (0.95767),
+# the 16GB dev box. max_pixels 200704 scored highest (0.95867) vs 786432 (0.95767).
 # Model: Qwen/Qwen3-VL-8B-Instruct (public weights, pre-2026-05-31). Final label parsed
 # from LLM output (no rule override). Inference ~0.25 s/sample, well under 0.5s budget.
 defaults: configs/default.yaml
