@@ -5,7 +5,7 @@
 | qwen3vl_8b.csv | Qwen3-VL-8B 4bit, bias_guarded, max_pixels 200704 | **0.95867** (best) |
 | qwen3vl_8b_hires.csv | Qwen3-VL-8B 4bit, bias_guarded, max_pixels 786432 | 0.95767 |
 | qwen3vl_8b_evidence_only.csv | Qwen3-VL-8B 4bit, evidence_only, max_pixels 786432 | 0.9295 |
-| qwen3vl_8b_lowres.csv | Qwen3-VL-8B 4bit, bias_guarded, max_pixels 100352 | pending |
+| qwen3vl_8b_lowres.csv | Qwen3-VL-8B 4bit, bias_guarded, max_pixels 100352 | 0.95683 |
 | internvl3_8b.csv | InternVL3-8B 4bit, bias_guarded, 448x448 tiling | not yet submitted |
 | qwen25vl_7b.csv | Qwen2.5-VL-7B 4bit, bias_guarded | 0.90658 |
 | qwen25vl_7b_mp1m.csv | Qwen2.5-VL-7B, higher-res | 0.90458 |
@@ -15,12 +15,12 @@
 ## Learnings
 - Model is the big lever: Qwen2.5-VL-7B 0.9066 -> Qwen3-VL-8B 0.9587.
 - bias_guarded >> evidence_only (0.958 vs 0.9295) for this BBQ task.
-- Higher resolution does NOT help: max_pixels 200704 scored 0.95867 > 786432 scored 0.95767; lowres 100352 remains pending.
+- Resolution barely matters: max_pixels 200704=0.95867 > 786432=0.95767 > 100352=0.95683 (spread only 0.0018). 200704 is the sweet spot.
 
 ## Already submitted (KST 2026-06-03 window, all 5 daily slots used)
 1. qwen3vl_8b.csv (200704, best 0.95867)
 2. qwen3vl_8b_hires.csv (786432, 0.95767)
-3. qwen3vl_8b_lowres.csv (100352, pending)
+3. qwen3vl_8b_lowres.csv (100352, 0.95683)
 4. qwen3vl_8b_evidence_only.csv (786432, 0.9295)
 5. qwen25vl_7b.csv (0.90658)
 All returned dacon_api_result isSubmitted=true detail=Success.
@@ -30,7 +30,7 @@ Strongest distinct candidates to submit after the next daily reset:
 1. qwen3vl_8b.csv (confirmed best 0.95867)
 2. internvl3_8b.csv (NEW InternVL3-8B; 1031/8500 labels differ from best; pending)
 3. qwen3vl_8b_hires.csv (confirmed 0.95767)
-4. qwen3vl_8b_lowres.csv (pending; 249 diff from best)
+4. qwen3vl_8b_lowres.csv (0.95683; 249 diff from best)
 5. qwen25vl_7b.csv (floor 0.90658)  <-- SUPERSEDED: replaced by qwen3vl_8b_bgv2.csv in loop 14
 Note: qwen3vl_8b_evidence_only.csv (0.9295) is intentionally EXCLUDED from the next-window top-5 as the weakest candidate.
 Submit next window e.g.: python scripts/submit_dacon.py --submission artifacts/final/internvl3_8b.csv --team qws941
@@ -50,7 +50,7 @@ Replaced weakest qwen25vl_7b (0.90658) with qwen3vl_8b_bgv2 (bias_guarded_v2 pro
 1. qwen3vl_8b.csv (0.95867 best)
 2. internvl3_8b.csv (NEW model, 1031 diff)
 3. qwen3vl_8b_hires.csv (0.95767)
-4. qwen3vl_8b_lowres.csv (pending)
+4. qwen3vl_8b_lowres.csv (0.95683)
 5. qwen3vl_8b_bgv2.csv (NEW prompt, 279 diff; cached-model reuse, no download)
 Auto-submit script (scripts/auto_submit_next_window.sh) updated to this set.
 
@@ -81,3 +81,8 @@ Auto-submit script (scripts/auto_submit_next_window.sh) updated to this set.
 
 ## Hardening (loop 25): systemd timeout reproducibility
 - dacon-auto-submit.service now declares `TimeoutStartSec=infinity` (deploy copy + installed unit, daemon-reloaded). The auto-submit script can loop for hours waiting for the daily-cap reset (10-min retry); without this, a host whose DefaultTimeoutStartSec is finite would SIGTERM the oneshot mid-wait and silently miss the window. Effective value confirmed `TimeoutStartUSec=infinity`; timer still enabled, next fire Thu 2026-06-04 00:05 KST.
+
+## Leaderboard update (loop 25, real scores in)
+- qwen3vl_8b_lowres.csv scored 0.95683 (was pending). Full confirmed ranking: qwen3vl_8b 0.95867 (best) > hires 0.95767 > lowres 0.95683 > evidence_only 0.9295 > qwen25vl_7b 0.90658 > mp1m 0.90458 > llava 0.469 > all-zero 0.34083.
+- Of the next-window top-5, THREE are already scored (qwen3vl_8b 0.95867, hires 0.95767, lowres 0.95683). Re-submitting them is harmless (idempotent) but yields no new info.
+- The only UNSCORED candidates are internvl3_8b.csv and qwen3vl_8b_bgv2.csv. The next window's real value = learning whether either beats 0.95867. internvl3_8b differs from best on 1031/8500 labels (genuinely different model); bgv2 differs on 279/8500 (prompt variant). Neither is guaranteed to beat best; qwen3vl_8b remains the safe top pick already locked in at 0.95867.
