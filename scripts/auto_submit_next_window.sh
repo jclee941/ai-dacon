@@ -41,7 +41,7 @@ submit_one() {
     out="$("$VENV/bin/python" scripts/submit_dacon.py --submission "$csv" --team "$TEAM" --memo "$memo" 2>&1)"
     log "submit $name -> $out"
     if echo "$out" | grep -q "isSubmitted': True"; then
-      touch "$STATE/$name.done"
+      touch "$STATE/$name.done" || { log "WARN failed to write idempotency marker for $name"; return 1; }
       return 0
     fi
     if echo "$out" | grep -qi "Over max submission count"; then
